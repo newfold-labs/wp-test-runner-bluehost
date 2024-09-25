@@ -46,6 +46,7 @@ jobs:
 
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         php:
           - '/opt/cpanel/ea-php83/root/usr/bin/php'

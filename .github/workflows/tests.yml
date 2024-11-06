@@ -49,15 +49,15 @@ jobs:
       max-parallel: 1
       matrix:
         php:
-          - '/opt/cpanel/ea-php83/root/usr/bin/php'
-          - '/opt/cpanel/ea-php82/root/usr/bin/php'
-          - '/opt/cpanel/ea-php81/root/usr/bin/php'
-          - '/opt/cpanel/ea-php80/root/usr/bin/php'
-          - '/opt/cpanel/ea-php74/root/usr/bin/php'
-          - '/opt/cpanel/ea-php73/root/usr/bin/php'
-          - '/opt/cpanel/ea-php72/root/usr/bin/php'
+          - '83'
+          - '82'
+          - '81'
+          - '80'
+          - '74'
+          - '73'
+          - '72'
 
-    # Remove this line if Github Actions is your preferred means of running the tests.
+    # Remove this line if GitHub Actions is your preferred means of running the tests.
     # if: ${{ false }}
 
     env:
@@ -67,10 +67,10 @@ jobs:
       # WPT_PREPARE_DIR: ${{ secrets.WPT_PREPARE_DIR }}
       # WPT_TEST_DIR: ${{ secrets.WPT_TEST_DIR }}
       WPT_REPORT_API_KEY: ${{ secrets.WPT_REPORT_API_KEY }}
-      WPT_PHP_EXECUTABLE: ${{ matrix.php }}
+      WPT_PHP_EXECUTABLE: /opt/cpanel/ea-${{ matrix.php }}/root/usr/bin/php
       # WPT_PHP_EXECUTABLE: ${{ secrets.WPT_PHP_EXECUTABLE }}
       # Database settings
-      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}
+      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_${{ matrix.php }}
       WPT_DB_USER: ${{ secrets.WPT_DB_USER }}
       WPT_DB_PASSWORD: ${{ secrets.WPT_DB_PASSWORD }}
       WPT_DB_HOST: ${{ secrets.WPT_DB_HOST }}

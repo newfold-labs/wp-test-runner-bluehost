@@ -90,9 +90,7 @@ if ( ! empty( $WPT_SSH_PRIVATE_KEY_BASE64 ) ) {
 	} else {
 		perform_operations( array(
 			'chmod 600 ~/.ssh/id_rsa',
-			"ssh -vvv -o StrictHostKeyChecking=no 'fmyswamy@50.6.108.2' echo \"SSH works\"",
-			"ssh -vvv -o StrictHostKeyChecking=no 'fmyswamy@50.6.108.2' which wp",
-			'ssh -vvv' . $WPT_SSH_OPTIONS . ' ' . escapeshellarg( $WPT_SSH_CONNECT ) . ' wp cli info'
+			'ssh -q ' . $WPT_SSH_OPTIONS . ' ' . escapeshellarg( $WPT_SSH_CONNECT ) . ' wp cli info'
 		) );
 	}
 

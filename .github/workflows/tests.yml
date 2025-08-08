@@ -21,6 +21,9 @@ on:
      # Every 30 minutes.
      # - cron:  '0/30 * * * *'
    workflow_dispatch:
+   pull_request:
+     branches:
+       - 'master'
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:

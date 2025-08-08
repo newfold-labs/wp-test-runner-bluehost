@@ -73,7 +73,7 @@ jobs:
       WPT_PHP_EXECUTABLE: /opt/cpanel/ea-php${{ matrix.php }}/root/usr/bin/php
       # WPT_PHP_EXECUTABLE: ${{ secrets.WPT_PHP_EXECUTABLE }}
       # Database settings
-      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_${{ matrix.php }}
+      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_php${{ matrix.php }}
       WPT_DB_USER: ${{ secrets.WPT_DB_USER }}
       WPT_DB_PASSWORD: ${{ secrets.WPT_DB_PASSWORD }}
       WPT_DB_HOST: ${{ secrets.WPT_DB_HOST }}

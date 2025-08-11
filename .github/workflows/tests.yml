@@ -21,6 +21,7 @@ on:
      # Every 30 minutes.
      # - cron:  '0/30 * * * *'
    workflow_dispatch:
+   pull_request:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
@@ -96,15 +97,59 @@ jobs:
       - name: Prepare environment
         run: php prepare.php
 
+      - name: Detect the revision number
+        id: get-revision
+        env:
+          WPT_PREPARE_DIR: ${{ env.WPT_PREPARE_DIR }}
+        run: echo "number=$(git --git-dir='$WPT_PREPARE_DIR/.git' log -1 --pretty=%B | grep "git-svn-id:" | cut -d " " -f 2 | cut -d "@" -f 2)" >> "$GITHUB_OUTPUT"
+
+      - name: Find artifact by name
+        id: find-revision
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          REVISION: ${{ steps.get-revision.outputs.number }}
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "revision-php-${{ matrix.php }}-$REVISION"
+            });
+            
+            if (artifacts.data.artifacts.length > 0) {
+              const artifact = artifacts.data.artifacts[0];
+              console.log( `Found artifact: ${artifact.name} (ID: ${artifact.id})`);
+              return artifact.id;
+            } else {
+              return '';
+            }
+
       - name: Run unit tests
+        if: ${{ steps.find-revision.outputs.result == '' }}
         run: php test.php
         # Prevent the workflow from stopping if there are test failures.
         continue-on-error: true
 
       - name: Report the results
+        if: ${{ steps.find-revision.outputs.result == '' }}
+        id: report-results
         run: php report.php
         # Prevent the workflow from stopping if the reporting fails.
         continue-on-error: true
 
+      - name: Write revision to a file
+        if: ${{ steps.find-revision.outputs.result == '' && success() && steps.report-results.outcome == 'success'  }}
+        env:
+          REVISION: ${{ steps.get-revision.outputs.number }}
+        run: echo "$REVISION" > revision.txt
+
+      - name: Save artifact with the revision
+        if: ${{ steps.find-revision.outputs.result == '' && success() && steps.report-results.outcome == 'success'  }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          path: revision.txt
+          name: revision-php-${{ matrix.php }}-${{ steps.get-revision.outputs.number }}
+
       - name: Cleanup
+        if: ${{ steps.find-revision.outputs.result == '' }}
         run: php cleanup.php

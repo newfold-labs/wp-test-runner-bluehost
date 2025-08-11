@@ -56,6 +56,8 @@ jobs:
           - '/opt/cpanel/ea-php74/root/usr/bin/php'
           - '/opt/cpanel/ea-php73/root/usr/bin/php'
           - '/opt/cpanel/ea-php72/root/usr/bin/php'
+        environment_label:
+          - 'Shared Basic'
 
     # Remove this line if Github Actions is your preferred means of running the tests.
     # if: ${{ false }}
@@ -77,7 +79,7 @@ jobs:
       # SSH settings for connecting to the test environment.
       WPT_SSH_CONNECT: ${{ secrets.WPT_SSH_CONNECT }}
       WPT_SSH_PRIVATE_KEY_BASE64: ${{ secrets.WPT_SSH_PRIVATE_KEY_BASE64 }}
-      WPT_LABEL: 'Shared Basic'
+      WPT_LABEL: ${{ matrix.environment_label }}
 
     steps:
       - name: Checkout repository

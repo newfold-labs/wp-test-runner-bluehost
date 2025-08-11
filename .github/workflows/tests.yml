@@ -21,6 +21,7 @@ on:
      # Every 30 minutes.
      # - cron:  '0/30 * * * *'
    workflow_dispatch:
+   pull_request:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
@@ -70,7 +71,7 @@ jobs:
       WPT_PHP_EXECUTABLE: /opt/cpanel/ea-php${{ matrix.php }}/root/usr/bin/php
       # WPT_PHP_EXECUTABLE: ${{ secrets.WPT_PHP_EXECUTABLE }}
       # Database settings
-      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_php${{ matrix.php }}
+      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_php${{ matrix.php }}${{ github.event_name == 'pull_request' && '_pull_requests' || '' }}
       WPT_DB_USER: ${{ secrets.WPT_DB_USER }}
       WPT_DB_PASSWORD: ${{ secrets.WPT_DB_PASSWORD }}
       WPT_DB_HOST: ${{ secrets.WPT_DB_HOST }}
@@ -102,6 +103,7 @@ jobs:
         continue-on-error: true
 
       - name: Report the results
+        if: ${{ github.event_name != 'pull_request' }}
         run: php report.php
         # Prevent the workflow from stopping if the reporting fails.
         continue-on-error: true

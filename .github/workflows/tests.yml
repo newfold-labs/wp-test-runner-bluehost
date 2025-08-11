@@ -44,7 +44,7 @@ jobs:
   # - Reports the results.
   # - Cleans up.
   test:
-    name: Run Core PHPUnit tests
+    name: PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
 
     strategy:

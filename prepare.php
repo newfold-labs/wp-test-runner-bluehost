@@ -22,6 +22,7 @@ check_required_env();
  * These variables are used to configure SSH connections, file paths, and
  * executable commands needed for setting up the test environment.
  */
+$WPT_LABEL          = trim( getenv( 'WPT_LABEL' ) ) ? : 'default';
 $WPT_PREPARE_DIR    = trim( getenv( 'WPT_PREPARE_DIR' ) );
 $WPT_SSH_CONNECT    = trim( getenv( 'WPT_SSH_CONNECT' ) );
 $WPT_SSH_OPTIONS    = trim( getenv( 'WPT_SSH_OPTIONS' ) ) ? : '-o StrictHostKeyChecking=no';
@@ -164,6 +165,7 @@ if( extension_loaded( 'imagick' ) ) {
 	\$imagick_info = Imagick::queryFormats();
 }
 \$env = array(
+	'label'          => trim( getenv( 'WPT_LABEL' ) ),
 	'php_version'    => phpversion(),
 	'php_modules'    => array(),
 	'gd_info'        => \$gd_info,

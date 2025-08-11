@@ -99,6 +99,8 @@ jobs:
 
       - name: Detect the revision number
         id: get-revision
+        env:
+          WPT_PREPARE_DIR: ${{ env.WPT_PREPARE_DIR }}
         run: echo "number=$(git --git-dir='$WPT_PREPARE_DIR/.git' log -1 --pretty=%B | grep "git-svn-id:" | cut -d " " -f 2 | cut -d "@" -f 2)" >> "$GITHUB_OUTPUT"
 
       - name: Find artifact by name

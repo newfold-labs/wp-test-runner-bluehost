@@ -292,7 +292,7 @@ function get_env_details() {
 	}
 
 	$env = array(
-		'label'          => trim( getenv( 'WPT_LABEL' ) ),
+		'label'          => trim( getenv( 'WPT_LABEL' ) ) ?: 'default',
 		'php_version'    => phpversion(),
 		'php_modules'    => array(),
 		'gd_info'        => $gd_info,

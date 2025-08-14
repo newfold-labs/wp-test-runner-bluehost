@@ -21,6 +21,7 @@ on:
      # Every 30 minutes.
      # - cron:  '0/30 * * * *'
    workflow_dispatch:
+   pull_request:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
@@ -53,9 +54,6 @@ jobs:
           - '82'
           - '81'
           - '80'
-          - '74'
-          - '73'
-          - '72'
 
     # Remove this line if GitHub Actions is your preferred means of running the tests.
     # if: ${{ false }}
@@ -63,14 +61,14 @@ jobs:
     env:
       # This is only a subset/example of env vars available. See the `.env.default` file for a full list.
       WPT_PREPARE_DIR: /tmp/wp-test-runner
-      WPT_TEST_DIR: wp-test-runner-${{ matrix.php }}
+      WPT_TEST_DIR: wp-test-runner-${{ matrix.php }}${{ github.event_name == 'pull_request' && '-pull-requests' || '' }}
       # WPT_PREPARE_DIR: ${{ secrets.WPT_PREPARE_DIR }}
       # WPT_TEST_DIR: ${{ secrets.WPT_TEST_DIR }}
-      WPT_REPORT_API_KEY: ${{ secrets.WPT_REPORT_API_KEY }}
+      WPT_REPORT_API_KEY: ${{ github.event_name != 'pull_request' && secrets.WPT_REPORT_API_KEY || '' }}
       WPT_PHP_EXECUTABLE: /opt/cpanel/ea-php${{ matrix.php }}/root/usr/bin/php
       # WPT_PHP_EXECUTABLE: ${{ secrets.WPT_PHP_EXECUTABLE }}
       # Database settings
-      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_php${{ matrix.php }}
+      WPT_DB_NAME: ${{ secrets.WPT_DB_NAME }}_php${{ matrix.php }}${{ github.event_name == 'pull_request' && '_pull_requests' || '' }}
       WPT_DB_USER: ${{ secrets.WPT_DB_USER }}
       WPT_DB_PASSWORD: ${{ secrets.WPT_DB_PASSWORD }}
       WPT_DB_HOST: ${{ secrets.WPT_DB_HOST }}
@@ -107,4 +105,5 @@ jobs:
         continue-on-error: true
 
       - name: Cleanup
+        if: ${{ false }}
         run: php cleanup.php

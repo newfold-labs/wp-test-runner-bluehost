@@ -54,9 +54,6 @@ jobs:
           - '82'
           - '81'
           - '80'
-          - '74'
-          - '73'
-          - '72'
 
     # Remove this line if GitHub Actions is your preferred means of running the tests.
     # if: ${{ false }}
@@ -64,7 +61,7 @@ jobs:
     env:
       # This is only a subset/example of env vars available. See the `.env.default` file for a full list.
       WPT_PREPARE_DIR: /tmp/wp-test-runner
-      WPT_TEST_DIR: ~/wp-test-runner-${{ matrix.php }}${{ github.event_name == 'pull_request' && '-pull-requests' || '' }}
+      WPT_TEST_DIR: '~/wp-test-runner-${{ matrix.php }}${{ github.event_name == 'pull_request' && '-pull-requests' || '' }}'
       # WPT_PREPARE_DIR: ${{ secrets.WPT_PREPARE_DIR }}
       # WPT_TEST_DIR: ${{ secrets.WPT_TEST_DIR }}
       WPT_REPORT_API_KEY: ${{ github.event_name != 'pull_request' && secrets.WPT_REPORT_API_KEY || '' }}

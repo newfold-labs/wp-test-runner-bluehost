@@ -53,9 +53,6 @@ jobs:
           - '82'
           - '81'
           - '80'
-          - '74'
-          - '73'
-          - '72'
 
     # Remove this line if GitHub Actions is your preferred means of running the tests.
     # if: ${{ false }}
